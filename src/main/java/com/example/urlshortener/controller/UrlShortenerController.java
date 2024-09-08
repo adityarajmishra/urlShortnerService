@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -26,5 +28,10 @@ public class UrlShortenerController {
     public void redirectToOriginalUrl(@PathVariable String shortUrl, HttpServletResponse response) throws IOException {
         String originalUrl = service.getOriginalUrl(shortUrl);
         response.sendRedirect(originalUrl);
+    }
+
+    @GetMapping("/metrics/top-domains")
+    public ResponseEntity<List<Map.Entry<String, Integer>>> getTopDomains() {
+        return ResponseEntity.ok(service.getTopDomains());
     }
 }
