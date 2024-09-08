@@ -47,14 +47,38 @@ The application will start on `http://localhost:8080`.
 API Endpoints
 -------------
 
-1.  Shorten URL
-   -   POST `/api/shorten`
-   -   Request body: The long URL as plain text
-   -   Response: The shortened URL
-2.  Redirect to Original URL
-   -   GET `/api/r/{shortUrl}`
-   -   Redirects to the original long URL
-3.  Get Top Domains
+### Shorten URL
+
+**POST** `/api/shorten`
+
+Shortens the provided URL and returns a shortened version.
+
+**Request:**
+
+`curl --location 'http://localhost:8080/api/shorten'\
+--header 'Content-Type: application/json'\
+--data '"https://www.linkedin.com/in/rahul-mishra-dev/"'`
+
+**Response:**
+
+`"Imh0dHBz"`
+
+### Redirect to the Original URL
+
+**GET** `/api/r/{shortUrl}`
+
+Redirects to the original URL corresponding to the provided shortened URL.
+
+**Request:**
+
+`curl --location 'http://localhost:8080/api/r/Imh0dHBz'`
+
+**Note:**
+
+-   In Postman, ensure that "Automatically follow redirects" is turned **off** to see the `302 Found` response. You can find this setting in the Postman settings under the "General" tab.
+-   If you forget to turn off automatic redirection in Postman or if you are running the service locally, check the console logs. The redirection URL will be logged, allowing you to see where the short URL points.
+
+### Get Top Domains
    -   GET `/api/metrics/top-domains`
    -   Returns the top 3 domains that have been shortened the most
 
