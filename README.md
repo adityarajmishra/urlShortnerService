@@ -98,6 +98,26 @@ Running with Docker
     `docker run -p 8080:8080 url-shortener`
 
 The application will be accessible at `http://localhost:8080`.
+## Running with Docker
+
+### Pull the Docker Image
+
+To pull the Docker image from Docker Hub, use the following command:
+
+```sh
+docker pull adityarajmishra/url-shortener
+
+docker run -p 8080:8080 adityarajmishra/url-shortener
+
+Access the Application
+Once the container is running, the application will be accessible at:
+
+http://localhost:8080
+
+
+```
+
+
 
 Running Tests
 -------------
