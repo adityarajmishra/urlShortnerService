@@ -1,5 +1,6 @@
 package com.example.urlshortener.service;
 
+import com.example.urlshortener.exception.UrlNotFoundException;
 import com.example.urlshortener.model.UrlMapping;
 import com.example.urlshortener.repository.UrlMappingRepository;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class UrlShortenerService {
 
     public String getOriginalUrl(String shortUrl) {
         logger.info("Attempting to retrieve original URL for short URL: {}", shortUrl);
-        String originalUrl = urlCache.entrySet().stream()
+        return urlCache.entrySet().stream()
                 .filter(entry -> entry.getValue().equals(shortUrl))
                 .map(Map.Entry::getKey)
                 .findFirst()
@@ -60,16 +61,20 @@ public class UrlShortenerService {
                             .map(UrlMapping::getOriginalUrl)
                             .orElseThrow(() -> {
                                 logger.error("URL not found for short URL: {}", shortUrl);
-                                return new RuntimeException("URL not found");
+                                return new UrlNotFoundException("URL not found for short URL: " + shortUrl);
                             });
                 });
-        logger.info("Retrieved original URL: {}", originalUrl);
-        return originalUrl;
     }
 
     public List<Map.Entry<String, Integer>> getTopDomains() {
         return domainCount.entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .sorted((e1, e2) -> {
+                    int valueComparison = e2.getValue().compareTo(e1.getValue());
+                    if (valueComparison != 0) {
+                        return valueComparison;
+                    }
+                    return e1.getKey().compareTo(e2.getKey());
+                })
                 .limit(3)
                 .collect(Collectors.toList());
     }

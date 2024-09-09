@@ -1,5 +1,6 @@
 package com.example.urlshortener;
 
+import com.example.urlshortener.exception.UrlNotFoundException;
 import com.example.urlshortener.model.UrlMapping;
 import com.example.urlshortener.service.UrlShortenerService;
 import com.example.urlshortener.repository.UrlMappingRepository;
@@ -119,5 +120,15 @@ class UrlShortenerServiceTests {
 		assertEquals(2, topDomains.get(0).getValue());
 		assertEquals("otherdomain.com", topDomains.get(1).getKey());
 		assertEquals(1, topDomains.get(1).getValue());
+	}
+
+	@Test
+	void getOriginalUrl_NonExistentShortUrl_ThrowsUrlNotFoundException() {
+		String shortUrl = "nonexistent";
+
+		when(repository.findByShortUrl(shortUrl)).thenReturn(Optional.empty());
+
+		assertThrows(UrlNotFoundException.class, () -> service.getOriginalUrl(shortUrl));
+		verify(repository, times(1)).findByShortUrl(shortUrl);
 	}
 }
