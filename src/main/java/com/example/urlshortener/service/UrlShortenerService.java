@@ -27,6 +27,10 @@ public class UrlShortenerService {
     }
 
     public String shortenUrl(String originalUrl) {
+
+        String domain = extractDomain(originalUrl);
+        domainCount.merge(domain, 1, Integer::sum);
+        
         if (urlCache.containsKey(originalUrl)) {
             return urlCache.get(originalUrl);
         }
@@ -38,9 +42,6 @@ public class UrlShortenerService {
             UrlMapping mapping = new UrlMapping(originalUrl, shortUrl);
             repository.save(mapping);
             urlCache.put(originalUrl, shortUrl);
-
-            String domain = extractDomain(originalUrl);
-            domainCount.merge(domain, 1, Integer::sum);
 
             return shortUrl;
         } catch (Exception e) {
