@@ -24,4 +24,7 @@ public class UrlMapping {
         this.shortUrl = shortUrl;
         this.createdAt = LocalDateTime.now();
     }
+    public String getOriginalUrl() {
+        return this.originalUrl;
+    }
 }
